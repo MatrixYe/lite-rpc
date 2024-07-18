@@ -1,19 +1,21 @@
+use std::{env, time::Duration};
 use std::borrow::Cow;
 use std::fmt::{Debug, Display, Formatter};
 use std::net::SocketAddr;
 use std::str::FromStr;
-use std::{env, time::Duration};
 
-use crate::postgres_logger::{self, PostgresSessionConfig};
+use anyhow::Context;
+use clap::Parser;
+use dotenv::dotenv;
+use solana_rpc_client_api::client_error::reqwest::Url;
+
+use solana_lite_rpc_services::quic_connection_utils::QuicConnectionParameters;
+
 use crate::{
     DEFAULT_FANOUT_SIZE, DEFAULT_GRPC_ADDR, DEFAULT_RETRY_TIMEOUT, DEFAULT_RPC_ADDR,
     DEFAULT_WS_ADDR, MAX_RETRIES,
 };
-use anyhow::Context;
-use clap::Parser;
-use dotenv::dotenv;
-use solana_lite_rpc_services::quic_connection_utils::QuicConnectionParameters;
-use solana_rpc_client_api::client_error::reqwest::Url;
+use crate::postgres_logger::{self, PostgresSessionConfig};
 
 #[derive(Parser, Debug, Clone)]
 #[command(author, version, about, long_about = None)]
@@ -99,7 +101,15 @@ pub struct Config {
 impl Config {
     pub async fn load() -> anyhow::Result<Self> {
         dotenv().ok();
-
+        // 打印一些环境变量以验证加载情况
+        println!("LITE_RPC_HTTP_ADDR: {:?}", env::var("LITE_RPC_HTTP_ADDR"));
+        println!("LITE_RPC_WS_ADDR: {:?}", env::var("LITE_RPC_WS_ADDR"));
+        println!("RPC_ADDR: {:?}", env::var("RPC_ADDR"));
+        println!("WS_ADDR: {:?}", env::var("WS_ADDR"));
+        println!("IDENTITY: {:?}", env::var("IDENTITY"));
+        println!("USE_GRPC: {:?}", env::var("USE_GRPC"));
+        println!("GRPC_ADDR: {:?}", env::var("GRPC_ADDR"));
+        println!("GRPC_X_TOKEN: {:?}", env::var("GRPC_X_TOKEN"));
         let args = Args::parse();
 
         let config_path = if args.config.is_some() {
