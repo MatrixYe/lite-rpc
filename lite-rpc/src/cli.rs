@@ -152,7 +152,7 @@ impl Config {
             .map(|size| size.parse().unwrap())
             .unwrap_or(config.fanout_size);
 
-        // note: identity config is handled in load_identity_keypair
+        // note: identity config is handled in F
         // the behavior is different from the other config values as it does either take a file path or the keypair as json array
 
         config.prometheus_addr = env::var("PROMETHEUS_ADDR").unwrap_or(config.prometheus_addr);

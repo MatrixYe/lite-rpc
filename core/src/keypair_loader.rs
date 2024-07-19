@@ -1,6 +1,7 @@
+use std::env;
+
 use anyhow::Context;
 use solana_sdk::signature::Keypair;
-use std::env;
 
 pub async fn load_identity_keypair(
     identity_keyfile_path: Option<String>,
@@ -15,6 +16,7 @@ pub async fn load_identity_keypair(
         return Ok(None);
     };
 
+    println!("identity_jsonarray_str: {:?}", identity_jsonarray_str);
     let identity_bytes: Vec<u8> = serde_json::from_str(&identity_jsonarray_str)
         .context("Invalid identity format expected Vec<u8>")?;
 
