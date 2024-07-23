@@ -6,7 +6,7 @@ use solana_sdk::signature::Keypair;
 pub async fn load_identity_keypair(
     identity_keyfile_path: Option<String>,
 ) -> anyhow::Result<Option<Keypair>> {
-    let identity_jsonarray_str = if let Ok(identity_env_var) = env::var("IDENTITY") {
+    let identity_json_array_str = if let Ok(identity_env_var) = env::var("IDENTITY") {
         identity_env_var
     } else if let Some(identity_path) = identity_keyfile_path {
         tokio::fs::read_to_string(identity_path)
@@ -16,8 +16,8 @@ pub async fn load_identity_keypair(
         return Ok(None);
     };
 
-    println!("identity_jsonarray_str: {:?}", identity_jsonarray_str);
-    let identity_bytes: Vec<u8> = serde_json::from_str(&identity_jsonarray_str)
+    println!("identity_json_array_str: {:?}", identity_json_array_str);
+    let identity_bytes: Vec<u8> = serde_json::from_str(&identity_json_array_str)
         .context("Invalid identity format expected Vec<u8>")?;
 
     Ok(Some(

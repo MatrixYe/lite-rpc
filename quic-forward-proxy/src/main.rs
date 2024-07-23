@@ -1,13 +1,15 @@
-use crate::cli::Args;
-use crate::proxy::QuicForwardProxy;
-use crate::tls_self_signed_pair_generator::SelfSignedTlsConfigProvider;
+use std::sync::Arc;
+
 use anyhow::bail;
 use clap::Parser;
 use dotenv::dotenv;
 use log::info;
-use solana_lite_rpc_core::keypair_loader::load_identity_keypair;
-use std::sync::Arc;
 
+use solana_lite_rpc_core::keypair_loader::load_identity_keypair;
+
+use crate::cli::Args;
+use crate::proxy::QuicForwardProxy;
+use crate::tls_self_signed_pair_generator::SelfSignedTlsConfigProvider;
 use crate::validator_identity::ValidatorIdentity;
 
 pub mod cli;
@@ -33,6 +35,8 @@ pub async fn main() -> anyhow::Result<()> {
         proxy_listen_addr,
     } = Args::parse();
     dotenv().ok();
+    info!("identity_keypair={identity_keypair:?}");
+    info!("proxy_listen_addr={proxy_listen_addr:?}");
 
     let proxy_listener_addr = proxy_listen_addr.parse().unwrap();
 
