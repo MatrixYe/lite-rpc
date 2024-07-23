@@ -28,6 +28,7 @@ mod validator_identity;
 
 #[tokio::main(flavor = "multi_thread", worker_threads = 16)]
 pub async fn main() -> anyhow::Result<()> {
+    println!("APP:qui-forward-proxy Staring!");
     tracing_subscriber::fmt::init();
 
     let Args {
@@ -35,8 +36,8 @@ pub async fn main() -> anyhow::Result<()> {
         proxy_listen_addr,
     } = Args::parse();
     dotenv().ok();
-    info!("identity_keypair={identity_keypair:?}");
-    info!("proxy_listen_addr={proxy_listen_addr:?}");
+    println!("参数:identity_keypair = {:?}", identity_keypair);
+    println!("参数:proxy_listen_addr = {:?}", proxy_listen_addr);
 
     let proxy_listener_addr = proxy_listen_addr.parse().unwrap();
 
