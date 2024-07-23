@@ -428,6 +428,7 @@ pub async fn main() -> anyhow::Result<()> {
     let rpc_tester = tokio::spawn(RpcTester::new(rpc_client.clone()).start(config.use_grpc));
 
     info!("Use RPC address: {}", obfuscate_rpcurl(rpc_addr));
+    info!("config: {:?}", config);
 
     let main = start_lite_rpc(config, rpc_client);
 
